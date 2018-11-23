@@ -146,11 +146,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private AssetFileDescriptor getTrackAsset() throws IOException {
-        return getAssets().openFd("Protest the Hero - Drumhead Trial (Instrumental).mp3");
+        //return getAssets().openFd("Protest the Hero - Drumhead Trial (Instrumental).mp3");
+        return getAssets().openFd("VivaldiSpring.mp3");
     }
 
-    private native void SuperpoweredExample(int samplerate, int buffersize, String apkPath,
-                                            int fileOffset, int fileLength);
+    private native void SuperpoweredExample(int samplerate, int buffersize, String apkPath, int fileOffset, int fileLength);
 
     private native void onPlayPause(boolean play);
 

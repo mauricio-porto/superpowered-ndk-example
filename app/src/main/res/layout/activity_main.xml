@@ -38,7 +38,7 @@
             android:id="@+id/tv_artist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Protest The Hero"
+            android:text="Vivaldi"
             app:layout_constraintBottom_toTopOf="@+id/tv_song"
             app:layout_constraintEnd_toEndOf="@+id/tv_song"
             app:layout_constraintHorizontal_bias="0.5"
@@ -54,7 +54,7 @@
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:text="Drumhead Trial"
+            android:text="Spring"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -173,7 +173,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="6:05"
+            android:text="3:34"
             app:layout_constraintBottom_toTopOf="@+id/sb_track_progress"
             app:layout_constraintEnd_toEndOf="@+id/sb_track_progress"/>
 
