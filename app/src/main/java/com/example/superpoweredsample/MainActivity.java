@@ -9,6 +9,7 @@ import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.SeekBar;
 
+import com.braintech.plugjni.PlugSuperpowered;
 import com.example.superpoweredsample.databinding.MainActivityBinding;
 
 import java.io.IOException;
@@ -19,13 +20,9 @@ public class MainActivity extends AppCompatActivity {
     public static final int TEMPO_NORMAL = 1;
     public static final int TEMPO_DOUBLE = 2;
 
-    static {
-        System.loadLibrary("native-lib");
-        System.loadLibrary("SuperpoweredExample");
-    }
-
     boolean playing = false;
     private MainActivityBinding binding;
+    private PlugSuperpowered plugJNI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +39,10 @@ public class MainActivity extends AppCompatActivity {
         Integer fileOffset = trackLocationInfo.first;
         Integer fileLength = trackLocationInfo.second;
 
+        plugJNI = new PlugSuperpowered();
+
         // Arguments: path to the APK file, offset and length of the two resource files, sample rate, audio buffer size.
-        SuperpoweredExample(sampleRate, bufferSize, getPackageResourcePath(), fileOffset, fileLength);
+        plugJNI.createSuperpoweredInstance(sampleRate, bufferSize, getPackageResourcePath(), fileOffset, fileLength);
 
         setupViews();
 
@@ -57,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         binding.sbPitch.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                onPitchChanged(progress - 12);
+                plugJNI.setOnPitchChanged(progress - 12);
             }
 
             @Override
@@ -86,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                seekTo(seekBar.getProgress() / 100.0f);
+                plugJNI.setSeekTo(seekBar.getProgress() / 100.0f);
             }
         });
 
@@ -94,16 +93,16 @@ public class MainActivity extends AppCompatActivity {
         binding.radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             switch (checkedId) {
                 case R.id.rb_slow_down:
-                    onTempoSelected(TEMPO_HALF);
+                    plugJNI.setOnTempoSelected(TEMPO_HALF);
                     break;
                 case R.id.rb_normal_time:
-                    onTempoSelected(TEMPO_NORMAL);
+                    plugJNI.setOnTempoSelected(TEMPO_NORMAL);
                     break;
                 case R.id.rb_speed_up:
-                    onTempoSelected(TEMPO_DOUBLE);
+                    plugJNI.setOnTempoSelected(TEMPO_DOUBLE);
                     break;
                 default:
-                    onTempoSelected(TEMPO_NORMAL);
+                    plugJNI.setOnTempoSelected(TEMPO_NORMAL);
                     break;
             }
         });
@@ -112,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
     private void setPlaying(boolean playing) {
         this.playing = playing;
         this.binding.setPlaying(this.playing);
-        onPlayPause(this.playing);
+        plugJNI.setOnPlayPause(this.playing);
     }
 
     private Pair<Integer, Integer> getDeviceAudioInfo() {
@@ -149,16 +148,4 @@ public class MainActivity extends AppCompatActivity {
         //return getAssets().openFd("Protest the Hero - Drumhead Trial (Instrumental).mp3");
         return getAssets().openFd("VivaldiSpring.mp3");
     }
-
-    private native void SuperpoweredExample(int samplerate, int buffersize, String apkPath, int fileOffset, int fileLength);
-
-    private native void onPlayPause(boolean play);
-
-    private native void seekTo(double positionPercent);
-
-    private native void onPitchChanged(int pitchValue);
-
-    private native void onTempoSelected(int tempoValue);
-
-    public native String stringFromJNI();
 }
